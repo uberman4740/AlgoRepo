@@ -53,28 +53,30 @@ if __name__ == "__main__":
     print('usedlag: {}'.format(round(round(resultsCOIN[2],4))))
     print('nobs: {}'.format(round(resultsCOIN[3],4)))
     print('critical values: {}'.format(resultsCOIN[4]))
+        
     
-    
+
     #*************************************************
     # plotting the charts
     #*************************************************    
     #plot of numunits
     fig = plt.figure()
-    ax = fig.add_subplot(111)
+    ax = fig.add_subplot(211)
     ax.plot(numunits)
     ax.set_title('EWC-hedgeRatio*EWA')
     ax.set_xlabel('Data points')
     ax.set_ylabel('Numunits')
     ax.text(1100, 25, 'the number of units ')
     
+
     #plot of datapoints
-    fig1 = plt.figure()
-    ax1 = fig1.add_subplot(111)
-    ax1.plot(x,y,'o')
-    ax1.plot(xx,yy,'r')
-    ax1.set_title('EWC vs. EWA')
-    ax1.set_xlabel('EWC')
-    ax1.set_ylabel('EWA')
+    #fig1 = plt.figure()
+    ax = fig.add_subplot(212)
+    ax.plot(x,y,'o')
+    ax.plot(xx,yy,'r')
+    ax.set_title('EWC vs. EWA')
+    ax.set_xlabel('EWC')
+    ax.set_ylabel('EWA')
     
     plt.show()
     

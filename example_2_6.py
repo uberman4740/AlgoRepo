@@ -17,32 +17,39 @@ if __name__ == "__main__":
     # the paths
     # MAC: '/Users/Javi/Documents/MarketData/'
     # WIN: 'C:/Users/javgar119/Documents/Python/Data'
-    filename = 'EWC_EWA__IGE.csv'
-    full_path = root_path + filename
-    full_dataframe = pd.read_csv(full_path, index_col='Date')
-    # create a series with the data range asked
-    start_date = '2006-01-20'
-    end_date = '2012-06-11'
-    data =  subset_dataframe(full_dataframe, start_date, end_date)
+    filename_x = 'GXG_EC.csv'
+    #filename_y = 'ECOPETROL_ADR.csv'
+    full_path_x = root_path + filename_x
+    #full_path_y = root_path + filename_y
+    data = pd.read_csv(full_path_x, index_col='Date')
+    #create a series with the data range asked
+    #start_date = '2009-10-02'
+    #end_date = '2011-12-30'
+    #data =  subset_dataframe(x, start_date, end_date)
+    
+ 
+    y = data['GXG']
+    x = data['EC']
+    
+    y_ticket = 'GXG'
+    x_ticket = 'EC'
 
-    x = data['EWC']
-    y = data['EWA']
-    z = data['IGE']
+    
+   # z = data['IGE']
     k = polyfit(x,y,1)
     xx = linspace(min(x),max(x),1000)
     yy = polyval(k,xx)
  
-    lookback = 60
+    lookback = 20
     modelo2 = pd.ols(y=y, x=x, window_type='rolling', window=lookback)
     data = data[lookback-1:]
     betas = modelo2.beta
     #calculate the number of units for the strategy
-    numunits = subtract(data['EWC'], multiply(betas['x'], 
-                                              data['EWA']))
+    numunits = subtract(data[x_ticket], multiply(betas['x'], data[y_ticket]))
 
     model = sm.OLS(y, x)
     results = model.fit()
-    print(results.params)
+    #print(results.params)
     
     
     # cointegration test
@@ -63,20 +70,21 @@ if __name__ == "__main__":
     fig = plt.figure()
     ax = fig.add_subplot(211)
     ax.plot(numunits)
-    ax.set_title('EWC-hedgeRatio*EWA')
+    ax.set_title(x_ticket + '- HedgeRatio * ' + y_ticket)
     ax.set_xlabel('Data points')
     ax.set_ylabel('Numunits')
-    ax.text(1100, 25, 'the number of units ')
+    #ax.text(1000, -12, 'Seems like mean reverting')
     
 
+
     #plot of datapoints
-    #fig1 = plt.figure()
     ax = fig.add_subplot(212)
     ax.plot(x,y,'o')
     ax.plot(xx,yy,'r')
-    ax.set_title('EWC vs. EWA')
-    ax.set_xlabel('EWC')
-    ax.set_ylabel('EWA')
+    ax.set_title(x_ticket + ' vs. ' +  y_ticket)
+    ax.set_xlabel(x_ticket)
+    ax.set_ylabel(y_ticket)
+    
     
     plt.show()
     

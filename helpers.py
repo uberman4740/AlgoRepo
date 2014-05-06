@@ -25,12 +25,12 @@ def fromQuandl2csv(symbol, start_date, end_date, path, filename, header):
 
 if __name__ == "__main__":
     authtoken='ryDzS4euF3UoFtYwswQp'
-    start_date = '2002-01-01'   #format "yyyy-mm-dd"
-    end_date = '2014-01-01'     #format "yyyy-mm-dd"
-    symbol =  ["GOOG/NYSE_EWC.4","GOOG/NYSE_EWA.4", 'GOOG/NYSE_IGE.4']
+    start_date = '2009-01-01'   #format "yyyy-mm-dd"
+    end_date = '2012-01-01'     #format "yyyy-mm-dd"
+    symbol =  ["GOOG/NYSEARCA_GXG.4"]
     path_to_save ='C:/Users/javgar119/Documents/Python/Data/'
-    filename = 'EWC_EWA__IGE.csv'
-    header = ['EWC','EWA','IGE']
+    filename = 'Colombia_20_ETF.csv'
+    header = ['GXG']
    
     #'GOOG/NYSE_EWC'
     

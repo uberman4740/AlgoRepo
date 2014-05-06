@@ -1,7 +1,9 @@
 
 from datetime import *
+import datetime
 from numpy import *
-
+import statsmodels.api as sm
+import statsmodels.tsa.stattools as ts
 
  
 def normcdf(X):
@@ -124,25 +126,11 @@ def random_walk(seed=1000, mu = 0.0, sigma = 1, length=1000):
     return ts
 
 def subset_dataframe(data, start_date, end_date):
+    start = data.index.searchsorted(start_date)
+    end = data.index.searchsorted(end_date)
+    return data.ix[start:end]
 
-    while True:
-        try:
-            data.loc[start_date]
-            break
-        except KeyError:
-            start_date = datetime.strptime(start_date, '%d/%m/%Y')
-            start_date += timedelta(days=1)
-            start_date =  start_date.strftime('%d/%m/%Y')
-          
+def cointegration_test(y, x):
+    ols_result = sm.OLS(y, x).fit()
+    return ts.adfuller(ols_result.resid, maxlag=1)
     
-    while True:
-        try:
-            data.loc[end_date]
-            break
-        except KeyError:
-            end_date = datetime.strptime(end_date, '%d/%m/%Y')
-            end_date -= timedelta(days=1)
-            end_date =  end_date.strftime('%d/%m/%Y')
-            
-              
-    return data.loc[start_date:end_date]

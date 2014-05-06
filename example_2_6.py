@@ -53,8 +53,21 @@ if __name__ == "__main__":
     print('usedlag: {}'.format(round(round(resultsCOIN[2],4))))
     print('nobs: {}'.format(round(resultsCOIN[3],4)))
     print('critical values: {}'.format(resultsCOIN[4]))
+        
     
+<<<<<<< HEAD
+=======
+    #plot of numunits
+    fig = plt.figure()
+    ax = fig.add_subplot(111)
+    ax.plot(numunits)
+    ax.set_title('EWC-hedgeRatio*EWA')
+    ax.set_xlabel('Data points')
+    ax.set_ylabel('Numunits')
+    ax.text(1100, 25, 'the number of units ')
+>>>>>>> branch 'master' of https://github.com/RoadWarrior/AlgoRepo.git
     
+<<<<<<< HEAD
     #*************************************************
     # plotting the charts
     #*************************************************    
@@ -67,6 +80,8 @@ if __name__ == "__main__":
     ax.set_ylabel('Numunits')
     ax.text(1100, 25, 'the number of units ')
     
+=======
+>>>>>>> branch 'master' of https://github.com/RoadWarrior/AlgoRepo.git
     #plot of datapoints
     fig1 = plt.figure()
     ax1 = fig1.add_subplot(111)

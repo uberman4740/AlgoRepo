@@ -60,6 +60,10 @@ import numpy as np
 from numpy import zeros, ones, flipud, log
 from numpy.linalg import inv, eig, cholesky as chol
 from statsmodels.regression.linear_model import OLS
+<<<<<<< HEAD
+=======
+ 
+>>>>>>> branch 'master' of https://github.com/RoadWarrior/AlgoRepo.git
 from coint_tables import c_sja, c_sjt
  
 tdiff = np.diff

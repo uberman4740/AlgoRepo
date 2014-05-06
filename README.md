@@ -1,4 +1,7 @@
-AlgoRepo
-========
+Algorithmic Trading Repository
+===========================================================
 
-Repository for the Python3 code of my training
+Repository for some Python3 code for my trading
+
+contact: javier.macro.trader@gmail.com
+

@@ -226,12 +226,12 @@ def coint_johansen(x, p, k):
     print ('--> Trace Statistics')
     print ('variable statistic Crit-90% Crit-95%  Crit-99%')
     for i in range(len(result.lr1)):
-        print ('r =',i,'\t', result.lr1[i], result.cvt[i,0], result.cvt[i,1],result.cvt[i,2])
+        print ('r =',i,'\t', round(result.lr1[i],4), result.cvt[i,0], result.cvt[i,1],result.cvt[i,2])
     print ('--------------------------------------------------')
     print ('--> Eigen Statistics')
     print ('variable statistic Crit-90% Crit-95%  Crit-99%')
     for i in range(len(result.lr2)):
-        print ('r =',i,'\t', result.lr2[i], result.cvm[i,0], result.cvm[i,1],result.cvm[i,2])
+        print ('r =',i,'\t', round(result.lr2[i],4), result.cvm[i,0], result.cvm[i,1],result.cvm[i,2])
     print ('--------------------------------------------------')
     print ('eigenvectors:\n',result.evec)
     print ('--------------------------------------------------')
@@ -240,8 +240,6 @@ def coint_johansen(x, p, k):
  
  
     return result 
- 
- 
 
 def c_sjt(n,p):
 

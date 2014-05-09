@@ -6,6 +6,9 @@ import matplotlib.dates as dates
 from functions import *
 
 
+#from numpy import *
+#from numpy.linalg import *
+
 
 if __name__ == "__main__":
    
@@ -25,10 +28,12 @@ if __name__ == "__main__":
     #data =  subset_dataframe(data, start_date, end_date)
     
     results = coint_johansen(data, 0, 1)
-    w = list(results.evec[0])
+    w = results.evec
     
     print(type(w))
-    print(w)
+    print(w[:,0])
+        
+    
     # Calculate portfolio
     # with the result eigenvector uses as the weigth, proced to
     # calculate the portfolio.

@@ -17,7 +17,7 @@ if __name__ == "__main__":
     # the paths
     # MAC: '/Users/Javi/Documents/MarketData/'
     # WIN: 'C:/Users/javgar119/Documents/Python/Data'
-    filename_x = 'GXG_EC.csv'
+    filename_x = 'EWC_EWA_daily.csv'
     #filename_y = 'ECOPETROL_ADR.csv'
     full_path_x = root_path + filename_x
     #full_path_y = root_path + filename_y
@@ -25,14 +25,14 @@ if __name__ == "__main__":
     #create a series with the data range asked
     #start_date = '2009-10-02'
     #end_date = '2011-12-30'
-    #data =  subset_dataframe(x, start_date, end_date)
+    #data =  subset_dataframe(data, start_date, end_date)
     
  
-    y = data['GXG']
-    x = data['EC']
+    x = data['EWC']
+    y = data['EWA']
     
-    y_ticket = 'GXG'
-    x_ticket = 'EC'
+    x_ticket = 'EWC'
+    y_ticket = 'EWA'
 
     
    # z = data['IGE']
@@ -54,7 +54,7 @@ if __name__ == "__main__":
     
     # cointegration test
     resultsCOIN = cointegration_test(x,y)
-    print('****** COINTEGRATION TEST RESULTS *****')
+    print('****** COINTEGRATION TEST RESULTS FOR {} & [] *****'.format(x_ticket, y_ticket))
     print('cointegration t-stat: {}'.format(round(resultsCOIN[0],4)))
     print('p-value: {}'.format(round(round(resultsCOIN[1],4))))
     print('usedlag: {}'.format(round(round(resultsCOIN[2],4))))
@@ -64,21 +64,26 @@ if __name__ == "__main__":
     
 
     #*************************************************
-    # plotting the charts
+    # plotting the chart
     #*************************************************    
     #plot of numunits
     fig = plt.figure()
-    ax = fig.add_subplot(211)
-    ax.plot(numunits)
-    ax.set_title(x_ticket + '- HedgeRatio * ' + y_ticket)
+    ax = fig.add_subplot(311)
+    ax.plot(data)
+    ax.set_title(x_ticket + ' & ' + y_ticket)
     ax.set_xlabel('Data points')
-    ax.set_ylabel('Numunits')
+    ax.set_ylabel('Price')
     #ax.text(1000, -12, 'Seems like mean reverting')
     
-
+    #plot of datapoints
+    ax = fig.add_subplot(312)
+    ax.plot(numunits)
+    ax.set_title(x_ticket + ' - (HedgeRatio * ' +  y_ticket + ')')
+    ax.set_xlabel(x_ticket)
+    ax.set_ylabel(y_ticket)
 
     #plot of datapoints
-    ax = fig.add_subplot(212)
+    ax = fig.add_subplot(313)
     ax.plot(x,y,'o')
     ax.plot(xx,yy,'r')
     ax.set_title(x_ticket + ' vs. ' +  y_ticket)

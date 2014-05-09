@@ -14,7 +14,7 @@ if __name__ == "__main__":
     # the paths
     # MAC: '/Users/Javi/Documents/MarketData/'
     # WIN: 'C:/Users/javgar119/Documents/Python/Data'
-    filename_x = 'EWC_EWA_daily.csv'
+    filename_x = 'EWC_EWA_IGE_daily.csv'
     #filename_y = 'ECOPETROL_ADR.csv'
     full_path_x = root_path + filename_x
     #full_path_y = root_path + filename_y
@@ -22,6 +22,17 @@ if __name__ == "__main__":
     #create a series with the data range asked
     #start_date = '2006-01-03'
     #end_date = '2012-04-17'
-    #data =  subset_dataframe(x, start_date, end_date)
+    #data =  subset_dataframe(data, start_date, end_date)
     
     results = coint_johansen(data, 0, 1)
+    w = list(results.evec[0])
+    
+    print(type(w))
+    print(w)
+    # Calculate portfolio
+    # with the result eigenvector uses as the weigth, proced to
+    # calculate the portfolio.
+    
+    
+    
+    

@@ -29,6 +29,8 @@ if __name__ == "__main__":
     end_date = '2012-01-01'     #format "yyyy-mm-dd"
     symbol =  ["GOOG/NYSEARCA_GXG.4"]
     path_to_save ='C:/Users/javgar119/Documents/Python/Data/'
+    #MAC: '/Users/Javi/Documents/MarketData/'
+    #WIN: 'C:/Users/javgar119/Documents/Python/Data/'    
     filename = 'Colombia_20_ETF.csv'
     header = ['GXG']
    

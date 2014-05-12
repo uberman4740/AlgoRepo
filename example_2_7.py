@@ -13,10 +13,10 @@ from functions import *
 if __name__ == "__main__":
    
     #import data from CSV file
-    root_path = '/Users/Javi/Documents/MarketData/'
+    root_path = 'C:/Users/javgar119/Documents/Python/Data/'
     # the paths
     # MAC: '/Users/Javi/Documents/MarketData/'
-    # WIN: 'C:/Users/javgar119/Documents/Python/Data'
+    # WIN: 'C:/Users/javgar119/Documents/Python/Data/'
     filename_x = 'EWC_EWA_IGE_daily.csv'
     #filename_y = 'ECOPETROL_ADR.csv'
     full_path_x = root_path + filename_x
@@ -35,14 +35,17 @@ if __name__ == "__main__":
     w = results.evec[:, 0]
  
  
-    #print(w)
+    
     
     # (net) market value of portfolio
     # this is the syntetic asset we are going to trade. A freshly new mean reverting serie 
     # compose of the three assets in proportions given by the eigenvector
-    y = pd.DataFrame.sum(w*data, axis=1)
-
-    hl = half_life(y)
+    yport = pd.DataFrame.sum(w*data, axis=1)
+    
+    #print(data.tail(10))
+    print('w')
+    print(w)
+    #print(yport.tail(10))
 
     # LINEAR STRATEGY
     # A linear trading strategy means that the number of units or shares of a
@@ -50,18 +53,45 @@ if __name__ == "__main__":
     # price series of that portfolio.
     
     
-    lookback = int(hl)
-    moving_mean = pd.rolling_mean(y, window=lookback) 
-    moving_std = pd.rolling_std(y,window=lookback)
+    lookback = int(half_life(yport))
+    #print(lookback)
+    moving_mean = pd.rolling_mean(yport, window=lookback) 
+    moving_std = pd.rolling_std(yport,window=lookback)
     
-    z_score = (y - moving_mean) / moving_std
-    print(z_score)
-    numunits = z_score + -1
-    print(numunits)
-    pnl = divide(multiply(numunits[:-1], diff(y)),-numunits[:-1])
+    #print('moving_mean')
+    #print(moving_mean.tail(10))
+    
+    #print('moving_std')
+    #print(moving_std.tail(10))
+    
+    #print('yport')
+    #print(yport.tail(10))
+    
+    z_score = (yport - moving_mean) / moving_std
+    
+    #print('z_score')
+    #print(z_score.tail(10))
+    
+    numunits = z_score * -1
+    print('numunits')
+    print(type(numunits))
+    print(numunits.tail(10))
+    
+    
+    
+    position1 = w * data
+    #position = pd.DataFrame(position1*numunits)
+    
+    print('position')
+    print(type(position))
+    print(position.tail(10))
+    #print(type(numunits))
+    #pnl = divide(multiply(position[:-1], diff(yport)),-position[:-1])
  
  
-    plt.plot(cumsum(pnl))
+    #plt.plot(cumsum(pnl))
+
+
 
 
 

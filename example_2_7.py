@@ -24,10 +24,12 @@ if __name__ == "__main__":
     #full_path_y = root_path + filename_y
     data = pd.read_csv(full_path_x, index_col='Date')
     #create a series with the data range asked
-    start_date = '2006-01-03'
-    end_date = '2012-04-17'
-    data =  subset_dataframe(data, start_date, end_date)
-
+    #start_date = '2006-01-03'
+    #end_date = '2012-04-17'
+    #data =  subset_dataframe(data, start_date, end_date)
+    #print('data import is {}'.format(str(len(data))))
+    #print(data.head(10))
+    #print(data.tail(10))
     #johansen test with non-zero offset but zero drift, and with the lag k=1.    
     results = coint_johansen(data, 0, 1)
     # those are the weigths of the portfolio
@@ -72,16 +74,14 @@ if __name__ == "__main__":
     #numunits = z_score * -1
     numunits = pd.DataFrame(z_score * -1, columns=['numunits'])
     
-    
     AA = repmat(numunits,1,3)
     BB = multiply(repmat(w,len(data),1),data)
     position = multiply(AA, BB)
-
-    pos = pd.DataFrame(position)
-    print(pos.tail(10))
     
     
     pnl = sum(divide(multiply(position[:-1],diff(data,axis = 0)), data[:-1]),1)
+    
  
+    
     plt.plot(cumsum(pnl[25:]))
     plt.show()

@@ -64,6 +64,10 @@ if __name__ == "__main__":
     AA = repmat(numunits,1,3)
     BB = multiply(repmat(w,len(data),1),data)
     position = multiply(AA, BB)
+<<<<<<< HEAD
+=======
+    
+>>>>>>> branch 'master' of https://github.com/RoadWarrior/AlgoRepo.git
     
     pnl = sum(divide(multiply(position[:-1],diff(data,axis = 0)), data[:-1]),1)
     

@@ -15,7 +15,7 @@ if __name__ == "__main__":
     # the paths
     # MAC: '/Users/Javi/Documents/MarketData/'
     # WIN: 'C:/Users/javgar119/Documents/Python/Data'
-    filename = 'EWC_EWA_IGE_daily.csv'
+    filename = 'GLD_SLV_daily.csv'
     full_path = root_path + filename
     data = pd.read_csv(full_path, index_col='Date')
     #create a series with the data range asked
@@ -24,7 +24,7 @@ if __name__ == "__main__":
     #data = subset_dataframe(data, start_date, end_date)
     #print('data import is {} lines'.format(str(len(data))))
     #print(data.head(10))
-    print(data.tail(5))
+    #print(data.tail(5))
     
     
     #johansen test with non-zero offset but zero drift, and with the lag k=1.
@@ -45,7 +45,10 @@ if __name__ == "__main__":
     #print('yport')
     #print(yport.tail(10))
 
-
+    
+    print('Hurst: {}'.format(round(hurst(yport),4)))
+    
+    
     # LINEAR STRATEGY
     # A linear trading strategy means that the number of units or shares of a
     # unit portfolio we own is proportional to the negative z-score of the
@@ -63,7 +66,7 @@ if __name__ == "__main__":
     numunits = pd.DataFrame(z_score * -1, columns=['numunits'])
     #print(numunits.tail(10))
     
-    AA = repmat(numunits,1,3)
+    AA = repmat(numunits,1,2)
     BB = multiply(repmat(w,len(data),1),data)
     position = pd.DataFrame(multiply(AA, BB))
     #print(position.tail(10))

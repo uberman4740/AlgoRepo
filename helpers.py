@@ -25,14 +25,15 @@ def fromQuandl2csv(symbol, start_date, end_date, path, filename, header):
 
 if __name__ == "__main__":
     authtoken='ryDzS4euF3UoFtYwswQp'
-    start_date = '2009-01-01'   #format "yyyy-mm-dd"
-    end_date = '2012-01-01'     #format "yyyy-mm-dd"
-    symbol =  ["GOOG/NYSEARCA_GXG.4"]
+    start_date = '2006-04-10'   #format "yyyy-mm-dd"
+    end_date = '2012-05-01'     #format "yyyy-mm-dd"
+    symbol =  'JAVIER_MACRO_TRADER/8UT'
+    #symbol =  ["GOOG/NYSEARCA_GXG.4"]
     path_to_save ='C:/Users/javgar119/Documents/Python/Data/'
     #MAC: '/Users/Javi/Documents/MarketData/'
     #WIN: 'C:/Users/javgar119/Documents/Python/Data/'    
-    filename = 'Colombia_20_ETF.csv'
-    header = ['GXG']
+    filename = 'GLD_USO_daily.csv'
+    header = ['GLD', 'USO']
    
     #'GOOG/NYSE_EWC'
     
@@ -40,6 +41,5 @@ if __name__ == "__main__":
     
     print(fromQuandl2csv(symbol,start_date=start_date, end_date=end_date, 
                          path=path_to_save, filename=filename, header=header))
-    #plt.plot(data)
-    #plt.show()
+
     

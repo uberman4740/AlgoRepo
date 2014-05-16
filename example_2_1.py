@@ -12,7 +12,10 @@ book ALGORITHMIC TRADING - Winning Strategies and Their Rationale
 if __name__ == "__main__":
 
     #import data from CSV file
-    root_path = '/Users/Javi/Documents/MarketData/'
+    root_path = 'C:/Users/javgar119/Documents/Python/Data/'
+    # the paths
+    # MAC: '/Users/Javi/Documents/MarketData/'
+    # WIN: 'C:/Users/javgar119/Documents/Python/Data/'
     filename = 'USDCAD_daily.csv'
     full_path = root_path + filename
     full_dataframe = pd.read_csv(full_path, index_col='Date')
@@ -56,18 +59,15 @@ if __name__ == "__main__":
     lookback = int(hl)
     moving_mean = pd.rolling_mean(data, window=lookback) 
     moving_std = pd.rolling_std(data,window=lookback)
-    
-    print(len(moving_mean))
-    
-    print(len(moving_std))
-    print(len(data))
+
     
     z_score = divide(subtract(data['Rate'] , moving_mean['Rate']), moving_std['Rate'])
     numunits = multiply(z_score, -1)
     pnl = divide(multiply(numunits[:-1], diff(data['Rate'])),-numunits[:-1])
     
     # plot accumulative % PnL
-        # some especifications for the charts
+    
+    # some especifications for the charts
     font = {'family' : 'serif',
         'color'  : 'black',
         'weight' : 'normal',

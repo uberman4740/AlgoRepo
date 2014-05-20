@@ -17,7 +17,7 @@ if __name__ == "__main__":
     # the paths
     # MAC: '/Users/Javi/Documents/MarketData/'
     # WIN: 'C:/Users/javgar119/Documents/Python/Data'
-    filename = 'GLD_USO_daily.csv'
+    filename = 'GLD_USO_daily2.csv'
     full_path = root_path + filename
     data = pd.read_csv(full_path, index_col='Date')
    

@@ -27,9 +27,9 @@ if __name__ == "__main__":
     authtoken='ryDzS4euF3UoFtYwswQp'
     start_date = '2006-04-10'   #format "yyyy-mm-dd"
     end_date = '2012-05-01'     #format "yyyy-mm-dd"
-    symbol =  'JAVIER_MACRO_TRADER/8UT'
+    symbol =  'JAVIER_MACRO_TRADER/8V5'
     #symbol =  ["GOOG/NYSEARCA_GXG.4"]
-    path_to_save ='C:/Users/javgar119/Documents/Python/Data/'
+    path_to_save = '/Users/Javi/Documents/MarketData/'
     #MAC: '/Users/Javi/Documents/MarketData/'
     #WIN: 'C:/Users/javgar119/Documents/Python/Data/'    
     filename = 'GLD_USO_daily.csv'

@@ -13,7 +13,7 @@ import numpy as np
 if __name__ == "__main__":
    
     #import data from CSV file
-    root_path = 'C:/Users/javgar119/Documents/Python/Data/'
+    root_path = '/Users/Javi/Documents/MarketData/'
     # the paths
     # MAC: '/Users/Javi/Documents/MarketData/'
     # WIN: 'C:/Users/javgar119/Documents/Python/Data'
@@ -35,11 +35,11 @@ if __name__ == "__main__":
     modelo = pd.ols(y=y, x=x, window_type='rolling', window=lookback)
     data = data[lookback-1:]
     betas = modelo.beta
-    
+
     # calculate the number of units for the strategy in the form
     # y-beta*x
     yport = pd.DataFrame(data[y_ticket] - (betas['x'] * data[x_ticket]))
-    
+
     moving_mean = pd.rolling_mean(yport, window=lookback)
     moving_std = pd.rolling_std(yport,window=lookback)
 
@@ -47,24 +47,38 @@ if __name__ == "__main__":
     # the number of units of the syntetic portfolio is given by the
     # negative value of z-score
     Zscore = (yport - moving_mean) / moving_std
-    
+
     # trade signal 
     long_entry = Zscore < -entryZscore
     long_exit = Zscore >= -entryZscore
     short_entry = Zscore > entryZscore
     short_exit = Zscore <= entryZscore
     
+
+    
+    numunits_long= np.zeros((len(yport),1))
+    numunits_long = pd.DataFrame(np.where(long_entry,1,0))
+    #numunits_long = pd.DataFrame(np.where(long_exit,0,NaN))
     
     
-    
-    """
+    numunits_short= np.zeros((len(yport),1))
+    numunits_short = pd.DataFrame(np.where(short_entry,-1,0))
+
+    numunits = numunits_long + numunits_short
+    numunits=multiply(numunits,Zscore )
+    #print(numunits.tail(200))
+ 
     # compute the $ position for each asset
     AA = pd.DataFrame(repmat(numunits,1,2))
     BB = pd.DataFrame(-betas['x'])
     BB['ones'] = np.ones((len(betas)))
+    
     position = multiply(multiply(AA, BB), data)
-
+    #print (AA.tail(200))
+    #print (BB.head(50))
+    print(position.head(50))
     # compute the daily pnl in $$
+    
     pnl = sum(multiply(position[:-1], divide(diff(data,axis = 0), data[:-1])),1)
     
         
@@ -82,8 +96,8 @@ if __name__ == "__main__":
     ##################################################
     # print the results
     ##################################################
-    print('Price spread Sharpe: {:.4}'.format(sharpe))
-    print('Price Spread APR: {:.4%}'.format(APR))
+    #print('Price spread Sharpe: {:.4}'.format(sharpe))
+    #print('Price Spread APR: {:.4%}'.format(APR))
     
     
     #*************************************************
@@ -93,11 +107,10 @@ if __name__ == "__main__":
     fig = plt.figure()
     ax = fig.add_subplot(111)
     ax.plot(cumsum(rtn))
-    ax.set_title('{}-{} Price Spread Acum Return'.format(x_ticket, y_ticket))
+    ax.set_title('{}-{} Bollinger Band     Acum Return'.format(x_ticket, y_ticket))
     ax.set_xlabel('Data points')
     ax.set_ylabel('acumm rtn')
     ax.text(1000, 0, 'Sharpe: {:.4}'.format(sharpe))
     ax.text(1000, -0.03, 'APR: {:.4%}'.format(APR))
     
     plt.show()
-    """

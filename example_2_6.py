@@ -17,7 +17,7 @@ if __name__ == "__main__":
     # the paths
     # MAC: '/Users/Javi/Documents/MarketData/'
     # WIN: 'C:/Users/javgar119/Documents/Python/Data'
-    filename_x = 'EWC_EWA_daily.csv'
+    filename_x = 'GLD_SLV_daily.csv'
     #filename_y = 'ECOPETROL_ADR.csv'
     full_path_x = root_path + filename_x
     #full_path_y = root_path + filename_y
@@ -28,11 +28,11 @@ if __name__ == "__main__":
     #data =  subset_dataframe(data, start_date, end_date)
     
  
-    x = data['EWC']
-    y = data['EWA']
+    y = data['GLD']
+    x = data['SLV']
     
-    x_ticket = 'EWC'
-    y_ticket = 'EWA'
+    y_ticket = 'GLD'
+    x_ticket = 'SLV'
 
     
    # z = data['IGE']
@@ -40,7 +40,7 @@ if __name__ == "__main__":
     xx = linspace(min(x),max(x),1000)
     yy = polyval(k,xx)
  
-    lookback = 20
+    lookback = 100
     modelo2 = pd.ols(y=y, x=x, window_type='rolling', window=lookback)
     data = data[lookback-1:]
     betas = modelo2.beta

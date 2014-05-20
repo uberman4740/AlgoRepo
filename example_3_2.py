@@ -1,4 +1,3 @@
-from johansen_test import coint_johansen
 import pandas as pd
 import matplotlib.pyplot as plt
 from functions import *
@@ -17,12 +16,12 @@ if __name__ == "__main__":
     # the paths
     # MAC: '/Users/Javi/Documents/MarketData/'
     # WIN: 'C:/Users/javgar119/Documents/Python/Data/'
-    filename = 'GLD_USO_daily2.csv'   #version 2 is bloomberg data
+    filename = 'EWC_EWA_daily.csv'   #version 2 is bloomberg data
     full_path = root_path + filename
     data = pd.read_csv(full_path, index_col='Date')
    
-    y_ticket = 'USO'
-    x_ticket = 'GLD'
+    y_ticket = 'EWC'
+    x_ticket = 'EWA'
     
     y = data[y_ticket]
     x = data[x_ticket]

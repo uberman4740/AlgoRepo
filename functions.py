@@ -134,7 +134,6 @@ def cointegration_test(y, x):
     ols_result = sm.OLS(y, x).fit()
     return ts.adfuller(ols_result.resid, maxlag=1)
     
-
 def annualised_sharpe(returns, N=252):
     """
     Calculate the annualised Sharpe ratio of a returns stream 

@@ -17,6 +17,7 @@ import numpy as np
 import pylab as pl
 import pandas as pd
 from pykalman import KalmanFilter
+from pykalman.datasets import load_robot
 
 rnd = np.random.RandomState(0)
 
@@ -34,21 +35,39 @@ y_ticket = 'EWC'
 x_ticket = 'EWA'
 y = data[y_ticket]
 x = data[x_ticket]
+
 x = x[:100]
-observations=np.array(x)
+
+observations=np.asarray(x)
 
 n_timesteps = len(x)
 x = np.linspace(0, n_timesteps, n_timesteps)
 
+#transition_matrices
+#β(t) = β(t − 1) + ω(t − 1), (“State transition”) 
+#where ω is also a Gaussian noise but with covariance Vω. In other words, the
+#state transition model here is just the identity matrix.
+A = np.array([[1, 0], [0, 1]])
+#observation_matrices
+
+
+
 # create a Kalman Filter by hinting at the size of the state and observation
 # space.  If you already have good guesses for the initial parameters, put them
 # in here.  The Kalman Filter will try to learn the values of all variables.
-kf = KalmanFilter(transition_matrices=np.array([[1, 1], [0, 1]]),
-                  transition_covariance=0.1 * np.eye(2))
+kf = KalmanFilter(A, transition_covariance=0.01 * np.eye(2))
+
 
 # You can use the Kalman Filter immediately without fitting, but its estimates
 # may not be as good as if you fit first.
 states_pred = kf.em(observations).smooth(observations)[0]
+
+#(filtered_state_means, filtered_state_covariances) = kf.filter(observations)
+(smoothed_state_means, smoothed_state_covariances) = kf.smooth(observations)
+
+
+
+
 print('fitted model: {0}'.format(kf))
 
 # Plot lines for the observations without noise, the estimated position of the
@@ -58,7 +77,7 @@ pl.figure(figsize=(16, 6))
 obs_scatter = pl.scatter(x, observations, marker='x', color='b',
                          label='observations')
 position_line = pl.plot(x, states_pred[:, 0],
-                        linestyle='-', marker='o', color='r',
+                        linestyle='-', color='r',
                         label='position est.')
 #velocity_line = pl.plot(x, states_pred[:, 1],
 #                        linestyle='-', marker='o', color='g',

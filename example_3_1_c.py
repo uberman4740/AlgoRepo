@@ -13,11 +13,11 @@ import numpy as np
 if __name__ == "__main__":
    
     #import data from CSV file
-    root_path = 'C:/Users/javgar119/Documents/Python/Data/'
+    root_path = '/Users/Javi/Documents/MarketData/'
     # the paths
     # MAC: '/Users/Javi/Documents/MarketData/'
     # WIN: 'C:/Users/javgar119/Documents/Python/Data/'
-    filename = 'GLD_USO_daily2.csv'
+    filename = 'GLD_USO_daily.csv'
     full_path = root_path + filename
     data = pd.read_csv(full_path, index_col='Date')
     lookback = 20

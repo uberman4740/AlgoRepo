@@ -13,11 +13,11 @@ book ALGORITHMIC TRADING - Winning Strategies and Their Rationale
 if __name__ == "__main__":
    
     #import data from CSV file
-    root_path = 'C:/Users/javgar119/Documents/Python/Data/'
+    root_path = '/Users/Javi/Documents/MarketData/'
     # the paths
     # MAC: '/Users/Javi/Documents/MarketData/'
     # WIN: 'C:/Users/javgar119/Documents/Python/Data'
-    filename_x = 'GLD_SLV_daily.csv'
+    filename_x = 'EWC_EWA_daily.csv'
     #filename_y = 'ECOPETROL_ADR.csv'
     full_path_x = root_path + filename_x
     #full_path_y = root_path + filename_y
@@ -28,11 +28,11 @@ if __name__ == "__main__":
     #data =  subset_dataframe(data, start_date, end_date)
     
  
-    y = data['GLD']
-    x = data['SLV']
+    y = data['EWC']
+    x = data['EWA']
     
-    y_ticket = 'GLD'
-    x_ticket = 'SLV'
+    y_ticket = 'EWC'
+    x_ticket = 'EWA'
 
     
    # z = data['IGE']

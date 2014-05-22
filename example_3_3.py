@@ -115,6 +115,8 @@ if __name__ == "__main__":
     ################################################################
     # plotting the chart
     ################################################################
+    import datetime
+    
     fig = plt.figure()
     ax = fig.add_subplot(111)
     ax.plot(acum_rtn)
@@ -123,8 +125,22 @@ if __name__ == "__main__":
     ax.set_ylabel('cum rtn')
     ax.text(1200, 0.2, 'Sharpe: {:.4}'.format(sharpe))
     ax.text(1200, 0.15, 'APR: {:.4%}'.format(APR))
-    plt.show()
     
+    fig2 = plt.figure()
+    ax2 = fig2.add_subplot(111)
+    ax2.plot(e, color='blue')
+    ax2.plot(sqrt_Q, color='black')
+    ax2.plot(-sqrt_Q, color='black')
+
+    #ax2.plot(sqrt_Q)
+    #ax2.plot(-sqrt_Q)
+    ax2.set_title('error vs sqrt(variance prediction)')
+    ax2.set_xlabel('Data points')
+    ax2.set_ylabel('# std')
+    ax2.set_ylim(-2, 2)
+    
+    
+    plt.show()
     # chart example with prettyplotlib
     #fig, ax = plt.subplots(1)
     #y = acum_rtn

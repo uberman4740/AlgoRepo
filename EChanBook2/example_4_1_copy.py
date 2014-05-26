@@ -3,7 +3,7 @@
 import pandas as pd
 import scipy.io as sio
 import numpy as np
-
+from pandas import ExcelWriter
 import matplotlib.pyplot as plt
 
 
@@ -54,61 +54,49 @@ def get_data_from_matlab(file_url, index, columns, data):
     data = pd.DataFrame(cl, columns=columns, index=df_dates)
     
     return data       
+
+
+
+class strategy (object):
+    def __init__(self, name):
+        self.name = name
+     
+    def cl_std(self, cl, lookback=90):
+        return pd.rolling_std(cl.diff(1) / cl.shift(1), window=lookback)
     
-def gap_finder(op, lo, cl, hi, lookback=90, entryZscore=1, is_down_gap=True, topN=10):
-    """Descrption:
-    This function calculates where a stocks has gaped agains T-1
-    highs or low.
-    It takes the time series of open, high, close and low prices and compute
-    the distance from T+0 open to T-1 high (low) and compares agains the
-    historical up (down) gaps over a lookback period.
-    Distances grater that one (1) standard deviation are clasified as gaps. 
-    UpGap: high(T-1) - open(T+0) > entryZscore(UpGaps in lookback period)  
-    DownGap = open(T-0) - low(T+1) > entryZscore(DownGaps in lookback period)
-    Args:
-        op: dataframe containing open prices for a universe of stocks. size(NxM)
-        lo: dataframe containing low prices for a universe of stocks. size(NxM)
-        hi: dataframe containing high prices for a universe of stocks. size(NxM)
-        cl: dataframe containing close prices for a universe of stocks. size(NxM)
-        index and columns in these dataframes must be aligned
-        lookback: periods to be used in calculation od zscore
-        entryZscore: thereshold to determinate if theres a gap
-    return:
-        Dataframe: size (NxM), index and columns as original dataframes.
-        +1 = UpGap
-        -1 = DownGap
-        0 NaN 
+    def short(self, op, hi, cl, entryZscore=1, lookback=90, ma_window=20):
+        up_gap_rtn = ((op - hi.shift(1)) /  hi.shift(1))
+        tmp = (((op - hi.shift(1)) /  hi.shift(1)) < (self.cl_std(cl, lookback) * entryZscore)) 
+        tmp2 = up_gap_rtn > 0
+        tmp3 = cl < pd.rolling_mean(cl, window=ma_window )
+        return up_gap_rtn * tmp * tmp2 * tmp3
         
-    """
     
-    cl_std = pd.rolling_std(cl.diff(1) / cl.shift(1), window=lookback)
-    up_gap_rtn= ((op - hi.shift(1)) /  hi.shift(1))
-    down_gap_rtn = ((op - lo.shift(1)) /  lo.shift(1))
-    
-    if is_down_gap == False:
-        # UP GAPS = 1
-        # open is higher that last high
-        AA = up_gap_rtn > 0 
-        # gao is lower that z entry score
-        BB = up_gap_rtn < (cl_std*entryZscore)
-        gap= AA * BB * down_gap_rtn
-        gap = (gap.rank(axis=1, ascending= False)) <= topN
-        return gap
+    def long(self, op, lo, cl, entryZscore=1, lookback=90, ma_window=20):
+        down_gap_rtn = ((op - lo.shift(1)) /  lo.shift(1)) 
+        tmp =  ((op - lo.shift(1)) /  lo.shift(1)) > (self.cl_std(cl, lookback) * -entryZscore)
+        tmp2 = down_gap_rtn < 0
+        tmp3 = cl > pd.rolling_mean(cl, window=ma_window )
+        return down_gap_rtn * tmp * tmp2 * tmp3
+
+    def top_long_picks(self, df, topN=10):
+        return df.rank(axis=1, ascending= True) <= topN
         
-    elif is_down_gap == True:
-        # DOWN GAPS = -1
-        # open is lower that last low
-        HH = down_gap_rtn < 0
-        # gao is lower that z entry score
-        MM = down_gap_rtn > (-cl_std*entryZscore)
-        gap = HH * MM * down_gap_rtn 
-        gap = gap.rank(axis=1, ascending= True) <= topN
-        return gap
+    def top_short_picks(self, df, topN=10):
+        return df.rank(axis=1, ascending= False) <= topN
+        
+            
+    def rtn_long(self, df, op, cl):
+        pnl = np.sum(((cl-op) * df), axis=1) 
+        mrk_val = np.sum((op * df), axis=1)
+        rtn = np.cumsum(pnl / mrk_val, axis=0)
+        rtn = rtn.fillna(method='pad')
+        return rtn
+        
     
-
-
-
-
+    
+    
+    
 
 if __name__ == "__main__":
     ################################################################
@@ -124,49 +112,33 @@ if __name__ == "__main__":
     filename = 'example4_1.mat'   
     full_path = root_path + filename
     
+    
     # get the data form mat file
     cl = get_data_from_matlab(full_path, index='tday', columns='stocks', data='cl')
     op = get_data_from_matlab(full_path, index='tday', columns='stocks', data='op')
     lo = get_data_from_matlab(full_path, index='tday', columns='stocks', data='lo')
     hi = get_data_from_matlab(full_path, index='tday', columns='stocks', data='hi')
+    
+    
+    #export to csv files
+    #cl.to_csv(root_path + 'cl.csv', sep=",")
+    #op.to_csv(root_path + 'op.csv', sep=",")
+    #lo.to_csv(root_path + 'lo.csv', sep=",")
+    #hi.to_csv(root_path + 'hi.csv', sep=",")
 
-    ################################################################
-    # strategy 
-    ################################################################
+
     lookback = 90
     entryZscore= 1
-    topN= 10
     ma_window = 20
-     
-    down_gap = gap_finder(op=op, lo=lo, cl=cl, hi=hi, lookback=lookback, 
-                          entryZscore=entryZscore, is_down_gap=True, topN=topN)
-    up_gap = gap_finder(op=op, lo=lo, cl=cl, hi=hi, lookback=lookback, 
-                        entryZscore=entryZscore, is_down_gap=False)
-    under_ma = cl < pd.rolling_mean(cl, window=ma_window)
-    over_ma = cl > pd.rolling_mean(cl, window=ma_window)
+    topN= 10
     
+    str = strategy('BuyPanic')
+    longs = str.long(op=op, lo=lo, cl=cl, entryZscore=entryZscore, lookback=lookback,  ma_window=ma_window)
+    top_long = str.top_long_picks(longs, topN)
+    rtn = str.rtn_long(top_long, op=op, cl=cl)
     
-    numunits_long = over_ma * down_gap
-    
-    
-    # show the pick for each day
-    for index, row in numunits_long.iterrows():
-        picks = []
-        tmp = (row * row.index.values)
-        for item in tmp:
-            if item != '':
-                picks.append(item)
-        print(picks)
-        
-    
-    # pnl and return calculations
-    
-    pnl = np.sum((cl-op) * numunits_long, axis=1)
-    mrk_val = np.sum(op*numunits_long, axis=1)
-    rtn = pnl / mrk_val
 
-    acum_rtn = pd.DataFrame(np.cumsum(rtn))
-    acum_rtn = acum_rtn.fillna(method='pad')
+
     # compute performance statistics
     sharpe = (np.sqrt(252)*np.mean(rtn)) / np.std(rtn)
     APR = np.prod(1+rtn)**(252/len(rtn))-1
@@ -183,13 +155,14 @@ if __name__ == "__main__":
     
     fig = plt.figure()
     ax = fig.add_subplot(111)
-    ax.plot(acum_rtn)
+    ax.plot(rtn)
     ax.set_title('SP500 DOWN GAP')
     ax.set_xlabel('Data points')
     ax.set_ylabel('cum rtn')
     ax.text(1200, 2, 'Sharpe: {:.4}'.format(sharpe))
     ax.text(1200, 1, 'APR: {:.4%}'.format(APR))
     plt.show()
+    
 
 
 

@@ -7,11 +7,11 @@ if __name__ == "__main__":
     from numpy.matlib import repmat
     import numpy as np
 
-    import prettyplotlib as ppl
+    #import prettyplotlib as ppl
     ################################################################
     # import data from CSV file
     ################################################################
-    root_path = 'C:/Users/javgar119/Documents/Python/Data/'
+    root_path = '/Users/Javi/Documents/MarketData/'
     # the paths
     # MAC: '/Users/Javi/Documents/MarketData/'
     # WIN: 'C:/Users/javgar119/Documents/Python/Data/'
@@ -54,14 +54,14 @@ if __name__ == "__main__":
     for t in range(len(y)):
         if t > 0:
             beta[:, t] = beta[:, t-1]                   # state prediction. Equation 3.7
-            R= P + Vw                                   # state covariance prediction. Equation 3.8
+            R = P + Vw                                   # state covariance prediction. Equation 3.8
             yhat[t] = x[t, :].dot(beta[:, t])           # measurement prediction. Equation 3.9
             Q[t] = x[t, :].dot(R).dot(x[t, :].T) + Ve   # measurement variance prediction. Equation 3.10
             # Observe y(t)
             e[t] = y[t] - yhat[t]                       # measurement prediction error
             K = R.dot(x[t, :].T) / Q[t]                 # Kalman gain
             beta[:, t] = beta[:, t] + K * e[t]          # State update. Equation 3.11
-            P= R - K * x[t, :] * R                      # State covariance update. Euqation 3.12
+            P = R - K * x[t, :] * R                      # State covariance update. Euqation 3.12
 
     sqrt_Q = np.sqrt(Q)
     beta = pd.DataFrame(beta.T, index= index, columns=('x', 'intercept'))

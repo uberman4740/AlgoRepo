@@ -102,7 +102,10 @@ def gap_finder(op, lo, cl, hi, lookback=90, entryZscore=1, is_down_gap=True, top
         # gao is lower that z entry score
         MM = down_gap_rtn > (-cl_std*entryZscore)
         gap = HH * MM * down_gap_rtn 
-        gap = gap.rank(axis=1, ascending= True) <= topN
+        
+        #print(gap[90:120])
+        
+        
         return gap
     
 
@@ -143,21 +146,23 @@ if __name__ == "__main__":
                           entryZscore=entryZscore, is_down_gap=True, topN=topN)
     up_gap = gap_finder(op=op, lo=lo, cl=cl, hi=hi, lookback=lookback, 
                         entryZscore=entryZscore, is_down_gap=False)
-    under_ma = cl < pd.rolling_mean(cl, window=ma_window)
-    over_ma = cl > pd.rolling_mean(cl, window=ma_window)
+    under_ma = op < pd.rolling_mean(cl.shift(1), window=ma_window)
+    over_ma = op > pd.rolling_mean(cl.shift(1), window=ma_window)
+    down_gap_filtered = over_ma * down_gap
     
     
-    numunits_long = over_ma * down_gap
+    numunits_long = down_gap_filtered.rank(axis=1, ascending= True) <= topN
+    #print(down_gap[90:120])
     
+    down_gap_filtered.to_csv(root_path + 'numunits.csv', sep=",")
     
-    
-    for index, row in numunits_long.iterrows():
-        picks = []
-        tmp = (row * row.index.values)
-        for item in tmp:
-            if item != '':
-                picks.append(item)
-        print(picks)
+    #for index, row in numunits_long.iterrows():
+    #    picks = []
+    #    tmp = (row * row.index.values)
+    #    for item in tmp:
+    #        if item != '':
+    #            picks.append(item)
+    #    print(picks)
         
     
     
@@ -197,7 +202,7 @@ if __name__ == "__main__":
     
 
     
-    plt.show()
+    #plt.show()
 
 
 

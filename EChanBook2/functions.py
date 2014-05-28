@@ -4,6 +4,8 @@ import datetime
 from numpy import *
 import statsmodels.api as sm
 import statsmodels.tsa.stattools as ts
+import scipy.io as sio
+import pandas as pd
 
  
 def normcdf(X):
@@ -133,14 +135,60 @@ def subset_dataframe(data, start_date, end_date):
 def cointegration_test(y, x):
     ols_result = sm.OLS(y, x).fit()
     return ts.adfuller(ols_result.resid, maxlag=1)
-    
-def annualised_sharpe(returns, N=252):
-    """
-    Calculate the annualised Sharpe ratio of a returns stream 
-    based on a number of trading periods, N. N defaults to 252,
-    which then assumes a stream of daily returns.
 
-    The function assumes that the returns are the excess of 
-    those compared to a benchmark.
+
+def get_data_from_matlab(file_url, index, columns, data):
+    """Description:*
+    This function takes a Matlab file .mat and extract some 
+    information to a pandas data frame. The structure of the mat
+    file must be known, as the loadmat function used returns a 
+    dictionary of arrays and they must be called by the key name
+    
+    Args:
+        file_url: the ubication of the .mat file
+        index: the key for the array of string date-like to be used as index
+        for the dataframe
+        columns: the key for the array of data to be used as columns in 
+        the dataframe
+        data: the key for the array to be used as data in the dataframe
+    Returns:
+        Pandas dataframe
+         
     """
-    return np.sqrt(N) * returns.mean() / returns.std()
+    
+    import scipy.io as sio
+    import datetime as dt
+    # load mat file to dictionary
+    mat = sio.loadmat(file_url)
+    # define data to import, columns names and index
+    cl = mat[data]
+    stocks = mat[columns]
+    dates = mat[index]
+    
+    # extract the ticket to be used as columns name in dataframe
+    # to-do: list compression here
+    columns = []
+    for each_item in stocks:
+        for inside_item in each_item:
+            for ticket in inside_item:
+                columns.append(ticket)
+    # extract string ins date array and convert to datetimeindex
+    # to-do list compression here
+    df_dates =[]
+    for each_item in dates:
+        for inside_item in each_item:
+            df_dates.append(inside_item)
+    df_dates = pd.Series([pd.to_datetime(date, format= '%Y%m%d') for date in df_dates], name='date') 
+    
+    # construct the final dataframe
+    data = pd.DataFrame(cl, columns=columns, index=df_dates)
+    
+    return data       
+
+
+def my_path(loc):
+    if loc == 'PC':
+        root_path = 'C:/Users/javgar119/Documents/Python/Data/'
+    elif loc == 'MAC':
+        root_path = '/Users/Javi/Documents/MarketData/'
+    return root_path

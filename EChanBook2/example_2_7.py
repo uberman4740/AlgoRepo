@@ -11,7 +11,7 @@ from numpy.matlib import repmat
 if __name__ == "__main__":
    
     #import data from CSV file
-    root_path = '/Users/Javi/Documents/MarketData/'
+    root_path = 'C:/Users/javgar119/Documents/Python/Data/'
     # the paths
     # MAC: '/Users/Javi/Documents/MarketData/'
     # WIN: 'C:/Users/javgar119/Documents/Python/Data'

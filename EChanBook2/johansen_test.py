@@ -99,7 +99,7 @@ def resid(y, x):
  
  
  
-def coint_johansen(x, p, k):
+def coint_johansen(x, p, k, print_on_console=True):
  
     #    % error checking on inputs
     #    if (nargin ~= 3)
@@ -222,21 +222,22 @@ def coint_johansen(x, p, k):
     result.ind = aind
     result.meth = 'johansen'
  
-    print ('--------------------------------------------------')
-    print ('--> Trace Statistics')
-    print ('variable statistic Crit-90% Crit-95%  Crit-99%')
-    for i in range(len(result.lr1)):
-        print ('r =',i,'\t', round(result.lr1[i],4), result.cvt[i,0], result.cvt[i,1],result.cvt[i,2])
-    print ('--------------------------------------------------')
-    print ('--> Eigen Statistics')
-    print ('variable statistic Crit-90% Crit-95%  Crit-99%')
-    for i in range(len(result.lr2)):
-        print ('r =',i,'\t', round(result.lr2[i],4), result.cvm[i,0], result.cvm[i,1],result.cvm[i,2])
-    print ('--------------------------------------------------')
-    print ('eigenvectors:\n',result.evec)
-    print ('--------------------------------------------------')
-    print ('eigenvalues:\n',result.eig)
-    print ('--------------------------------------------------')
+    if print_on_console == True:
+        print ('--------------------------------------------------')
+        print ('--> Trace Statistics')
+        print ('variable statistic Crit-90% Crit-95%  Crit-99%')
+        for i in range(len(result.lr1)):
+            print ('r =',i,'\t', round(result.lr1[i],4), result.cvt[i,0], result.cvt[i,1], result.cvt[i,2])
+        print ('--------------------------------------------------')
+        print ('--> Eigen Statistics')
+        print ('variable statistic Crit-90% Crit-95%  Crit-99%')
+        for i in range(len(result.lr2)):
+            print ('r =',i,'\t', round(result.lr2[i],4), result.cvm[i,0], result.cvm[i,1], result.cvm[i,2])
+        print ('--------------------------------------------------')
+        print ('eigenvectors:\n',result.evec)
+        print ('--------------------------------------------------')
+        print ('eigenvalues:\n',result.eig)
+        print ('--------------------------------------------------')
  
  
     return result 

@@ -25,18 +25,18 @@ def fromQuandl2csv(symbol, start_date, end_date, path, filename, header):
 
 if __name__ == "__main__":
     authtoken='ryDzS4euF3UoFtYwswQp'
-    start_date = '2006-04-10'   #format "yyyy-mm-dd"
-    end_date = '2012-05-01'     #format "yyyy-mm-dd"
-    symbol =  'JAVIER_MACRO_TRADER/8V5'
+    start_date = '2006-05-11'   #format "yyyy-mm-dd"
+    end_date = '2012-04-24'     #format "yyyy-mm-dd"
+    symbol =  ['YAHOO/INDEX_SPY.4']
     #symbol =  ["GOOG/NYSEARCA_GXG.4"]
-    path_to_save = '/Users/Javi/Documents/MarketData/'
+    path_to_save = 'C:/Users/javgar119/Documents/Python/Data/'
     #MAC: '/Users/Javi/Documents/MarketData/'
     #WIN: 'C:/Users/javgar119/Documents/Python/Data/'    
-    filename = 'GLD_USO_daily.csv'
-    header = ['GLD', 'USO']
+    filename = 'SPY_daily.csv'
+    header = ['SPY']
    
     #'GOOG/NYSE_EWC'
-    
+    #'YAHOO/INDEX_SPY'
     
     
     print(fromQuandl2csv(symbol,start_date=start_date, end_date=end_date, 

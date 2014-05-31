@@ -27,13 +27,13 @@ if __name__ == "__main__":
     authtoken='ryDzS4euF3UoFtYwswQp'
     start_date = '2006-05-11'   #format "yyyy-mm-dd"
     end_date = '2012-04-24'     #format "yyyy-mm-dd"
-    symbol =  ['YAHOO/INDEX_SPY.4']
+    symbol =  'JAVIER_MACRO_TRADER/91G'
     #symbol =  ["GOOG/NYSEARCA_GXG.4"]
-    path_to_save = 'C:/Users/javgar119/Documents/Python/Data/'
+    path_to_save = '/Users/Javi/Documents/MarketData/'
     #MAC: '/Users/Javi/Documents/MarketData/'
     #WIN: 'C:/Users/javgar119/Documents/Python/Data/'    
-    filename = 'SPY_daily.csv'
-    header = ['SPY']
+    filename = 'CAD_AUD.csv'
+    header = ['USDCAD','AUDUSD']
    
     #'GOOG/NYSE_EWC'
     #'YAHOO/INDEX_SPY'

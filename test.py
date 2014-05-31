@@ -1,27 +1,31 @@
 
+from datetime import datetime
+import pytz
+
+from zipline import TradingAlgorithm
+from zipline.utils.factory import load_from_yahoo
+
+from zipline.api import order
 
 
-def test_gap(df):
-    
-    import pandas as pd
-    import numpy as np
-    serie = []
-    for index, row in df.iterrows():
-        
-        picks = []
-        tmp = (row * row.index.values)
-        for item in tmp:
-            if item != '':
-                picks.append(item)
-        serie.append(picks)
-    return serie    
-        
-        
-        
-
-    
+def initialize(context):
+    context.test = 10
 
 
-input = pd.DataFrame({'A':[True,False,False],'B':[True,True,True],'C':[False,False,True]})
-result = [['A','B'],['B'], ['B','C']]
+def handle_date(context, data):
+    order('AAPL', 10)
+    print(context.test)
 
+
+if __name__ == '__main__':
+    import pylab as pl
+    start = datetime(2008, 1, 1, 0, 0, 0, 0, pytz.utc)
+    end = datetime(2010, 1, 1, 0, 0, 0, 0, pytz.utc)
+    data = load_from_yahoo(stocks=['AAPL'], indexes={}, start=start,
+                           end=end)
+    data = data.dropna()
+    algo = TradingAlgorithm(initialize=initialize,
+                            handle_data=handle_date)
+    results = algo.run(data)
+    results.portfolio_value.plot()
+    pl.show()

@@ -19,7 +19,7 @@ class DataHandler(object):
     all subsequent (inherited) data handlers (both live and historic).
 
     The goal of a (derived) DataHandler object is to output a generated
-    set of bars (OHLCVI) for each symbol requested.
+    set of bars (OHLCVI) for each symbol requested. 
 
     This will replicate how a live strategy would function as current
     market data would be sent "down the pipe". Thus a historic and live
@@ -60,7 +60,7 @@ class DataHandler(object):
     @abstractmethod
     def get_latest_bars_values(self, symbol, val_type, N=1):
         """
-        Returns the last N bar values from the
+        Returns the last N bar values from the 
         latest_symbol list, or N-k if less available.
         """
         raise NotImplementedError("Should implement get_latest_bars_values()")
@@ -69,7 +69,7 @@ class DataHandler(object):
     def update_bars(self):
         """
         Pushes the latest bars to the bars_queue for each symbol
-        in a tuple OHLCVI format: (datetime, open, high, low,
+        in a tuple OHLCVI format: (datetime, open, high, low, 
         close, volume, open interest).
         """
         raise NotImplementedError("Should implement update_bars()")
@@ -80,7 +80,7 @@ class HistoricCSVDataHandler(DataHandler):
     HistoricCSVDataHandler is designed to read CSV files for
     each requested symbol from disk and provide an interface
     to obtain the "latest" bar in a manner identical to a live
-    trading interface.
+    trading interface. 
     """
 
     def __init__(self, events, csv_dir, symbol_list):
@@ -102,7 +102,7 @@ class HistoricCSVDataHandler(DataHandler):
 
         self.symbol_data = {}
         self.latest_symbol_data = {}
-        self.continue_backtest = True
+        self.continue_backtest = True       
         self.bar_index = 0
 
         self._open_convert_csv_files()
@@ -121,7 +121,7 @@ class HistoricCSVDataHandler(DataHandler):
             self.symbol_data[s] = pd.io.parsers.read_csv(
                                       os.path.join(self.csv_dir, '%s.csv' % s),
                                       header=0, index_col=0, parse_dates=True,
-                                      names=['datetime', 'open', 'low', 'high', 'close', 'volume', 'oi']
+                                      names=['datetime','open','low','high','close', 'volume','oi']
                                   ).sort()
 
             # Combine the index to pad forward values
@@ -142,7 +142,6 @@ class HistoricCSVDataHandler(DataHandler):
         """
         Returns the latest bar from the data feed.
         """
-
         for b in self.symbol_data[symbol]:
             yield b
 
@@ -198,7 +197,7 @@ class HistoricCSVDataHandler(DataHandler):
 
     def get_latest_bars_values(self, symbol, val_type, N=1):
         """
-        Returns the last N bar values from the
+        Returns the last N bar values from the 
         latest_symbol list, or N-k if less available.
         """
         try:

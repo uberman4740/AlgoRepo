@@ -1,5 +1,9 @@
 eclipse.preferences.version=1
-encoding//Quantstart/data.py=utf-8
-encoding//Quantstart/event.py=utf-8
-encoding//Quantstart/portfolio.py=utf-8
-encoding//Quantstart/strategy.py=utf-8
+encoding//quants/data.py=utf-8
+encoding//quants/event.py=utf-8
+encoding//quants/execution.py=utf-8
+encoding//quants/performance.py=utf-8
+encoding//quants/portfolio.py=utf-8
+encoding//quants/sqlite_data.py=utf-8
+encoding//quants/strategy.py=utf-8
+encoding/cadf.py=utf-8

@@ -20,19 +20,19 @@ class Portfolio(object):
     value of all instruments at a resolution of a "bar",
     i.e. secondly, minutely, 5-min, 30-min, 60 min or EOD.
 
-    The positions DataFrame stores a time-index of the
-    quantity of positions held.
+    The positions DataFrame stores a time-index of the 
+    quantity of positions held. 
 
     The holdings DataFrame stores the cash and total market
-    holdings value of each symbol for a particular
-    time-index, as well as the percentage change in
+    holdings value of each symbol for a particular 
+    time-index, as well as the percentage change in 
     portfolio total across bars.
     """
 
     def __init__(self, bars, events, start_date, initial_capital=100000.0):
         """
-        Initialises the portfolio with bars and an event queue.
-        Also includes a starting datetime index and initial capital
+        Initialises the portfolio with bars and an event queue. 
+        Also includes a starting datetime index and initial capital 
         (USD unless otherwise stated).
 
         Parameters:
@@ -46,9 +46,9 @@ class Portfolio(object):
         self.symbol_list = self.bars.symbol_list
         self.start_date = start_date
         self.initial_capital = initial_capital
-
+        
         self.all_positions = self.construct_all_positions()
-        self.current_positions = dict((k, v) for k, v in [(s, 0) for s in self.symbol_list])
+        self.current_positions = dict( (k,v) for k, v in [(s, 0) for s in self.symbol_list] )
 
         self.all_holdings = self.construct_all_holdings()
         self.current_holdings = self.construct_current_holdings()
@@ -58,7 +58,7 @@ class Portfolio(object):
         Constructs the positions list using the start_date
         to determine when the time index will begin.
         """
-        d = dict((k, v) for k, v in [(s, 0) for s in self.symbol_list])
+        d = dict( (k,v) for k, v in [(s, 0) for s in self.symbol_list] )
         d['datetime'] = self.start_date
         return [d]
 
@@ -67,7 +67,7 @@ class Portfolio(object):
         Constructs the holdings list using the start_date
         to determine when the time index will begin.
         """
-        d = dict((k, v) for k, v in [(s, 0.0) for s in self.symbol_list])
+        d = dict( (k,v) for k, v in [(s, 0.0) for s in self.symbol_list] )
         d['datetime'] = self.start_date
         d['cash'] = self.initial_capital
         d['commission'] = 0.0
@@ -79,7 +79,7 @@ class Portfolio(object):
         This constructs the dictionary which will hold the instantaneous
         value of the portfolio across all symbols.
         """
-        d = dict((k, v) for k, v in [(s, 0.0) for s in self.symbol_list])
+        d = dict( (k,v) for k, v in [(s, 0.0) for s in self.symbol_list] )
         d['cash'] = self.initial_capital
         d['commission'] = 0.0
         d['total'] = self.initial_capital
@@ -87,7 +87,7 @@ class Portfolio(object):
 
     def update_timeindex(self, event):
         """
-        Adds a new record to the positions matrix for the current
+        Adds a new record to the positions matrix for the current 
         market data bar. This reflects the PREVIOUS bar, i.e. all
         current market data at this stage is known (OHLCV).
 
@@ -97,7 +97,7 @@ class Portfolio(object):
 
         # Update positions
         # ================
-        dp = dict((k, v) for k, v in [(s, 0) for s in self.symbol_list])
+        dp = dict( (k,v) for k, v in [(s, 0) for s in self.symbol_list] )
         dp['datetime'] = latest_datetime
 
         for s in self.symbol_list:
@@ -108,7 +108,7 @@ class Portfolio(object):
 
         # Update holdings
         # ===============
-        dh = dict((k, v) for k, v in [(s, 0) for s in self.symbol_list])
+        dh = dict( (k,v) for k, v in [(s, 0) for s in self.symbol_list] )
         dh['datetime'] = latest_datetime
         dh['cash'] = self.current_holdings['cash']
         dh['commission'] = self.current_holdings['commission']
@@ -144,7 +144,7 @@ class Portfolio(object):
             fill_dir = -1
 
         # Update positions list with new quantities
-        self.current_positions[fill.symbol] += fill_dir * fill.quantity
+        self.current_positions[fill.symbol] += fill_dir*fill.quantity
 
     def update_holdings_from_fill(self, fill):
         """
@@ -171,7 +171,7 @@ class Portfolio(object):
 
     def update_fill(self, event):
         """
-        Updates the portfolio current positions and holdings
+        Updates the portfolio current positions and holdings 
         from a FillEvent.
         """
         if event.type == 'FILL':
@@ -200,8 +200,8 @@ class Portfolio(object):
         if direction == 'LONG' and cur_quantity == 0:
             order = OrderEvent(symbol, order_type, mkt_quantity, 'BUY')
         if direction == 'SHORT' and cur_quantity == 0:
-            order = OrderEvent(symbol, order_type, mkt_quantity, 'SELL')
-
+            order = OrderEvent(symbol, order_type, mkt_quantity, 'SELL')   
+    
         if direction == 'EXIT' and cur_quantity > 0:
             order = OrderEvent(symbol, order_type, abs(cur_quantity), 'SELL')
         if direction == 'EXIT' and cur_quantity < 0:
@@ -210,7 +210,7 @@ class Portfolio(object):
 
     def update_signal(self, event):
         """
-        Acts on a SignalEvent to generate new orders
+        Acts on a SignalEvent to generate new orders 
         based on the portfolio logic.
         """
         if event.type == 'SIGNAL':
@@ -229,7 +229,7 @@ class Portfolio(object):
         curve = pd.DataFrame(self.all_holdings)
         curve.set_index('datetime', inplace=True)
         curve['returns'] = curve['total'].pct_change()
-        curve['equity_curve'] = (1.0 + curve['returns']).cumprod()
+        curve['equity_curve'] = (1.0+curve['returns']).cumprod()
         self.equity_curve = curve
 
     def output_summary_stats(self):
@@ -240,7 +240,7 @@ class Portfolio(object):
         returns = self.equity_curve['returns']
         pnl = self.equity_curve['equity_curve']
 
-        sharpe_ratio = create_sharpe_ratio(returns, periods=252 * 60 * 6.5)
+        sharpe_ratio = create_sharpe_ratio(returns, periods=252*60*6.5)
         max_dd, dd_duration = create_drawdowns(pnl)
 
         stats = [("Total Return", "%0.2f%%" % ((total_return - 1.0) * 100.0)),

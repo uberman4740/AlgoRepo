@@ -16,8 +16,6 @@ class MovingAverageCrossStrategy(Strategy):
     windows are 100/400 periods respectively.
     """
 
-
-
     def __init__(self, bars, events, short_window=100, long_window=400):
         """
         Initialises the buy and hold strategy.
@@ -51,14 +49,14 @@ class MovingAverageCrossStrategy(Strategy):
         """
         Generates a new set of signals based on the MAC
         SMA with the short window crossing the long window
-        meaning a long entry and vice versa for a short entry.
+        meaning a long entry and vice versa for a short entry.    
 
         Parameters
-        event - A MarketEvent object.
+        event - A MarketEvent object. 
         """
         if event.type == 'MARKET':
             for symbol in self.symbol_list:
-                bars = self.bars.get_latest_bars_values(symbol, "close", N=self.long_window)
+                bars = self.bars.get_latest_bars_values(symbol, "close", N=self.long_window)               
 
                 if bars is not None and bars != []:
                     short_sma = np.mean(bars[-self.short_window:])
@@ -83,26 +81,20 @@ class MovingAverageCrossStrategy(Strategy):
 
 
 if __name__ == "__main__":
-
-    MAC = '/Users/Javi/Documents/MarketData'
-    PC = 'C:/Users/javgar119/Documents/Python/Data'
-    csv_dir = PC
-
+    csv_dir = 'C:/Users/javgar119/Documents/Python/Data/'
     symbol_list = ['AAPL']
     initial_capital = 100000.0
-    start_date = datetime.datetime(1990, 1, 1, 0, 0, 0)
+    start_date = datetime.datetime(1990,1,1,0,0,0)
     heartbeat = 0.0
 
-    backtest = Backtest(csv_dir,
-                        symbol_list,
-                        initial_capital,
+    backtest = Backtest(csv_dir, 
+                        symbol_list, 
+                        initial_capital, 
                         heartbeat,
                         start_date,
-                        HistoricCSVDataHandler,
-                        SimulatedExecutionHandler,
-                        Portfolio,
+                        HistoricCSVDataHandler, 
+                        SimulatedExecutionHandler, 
+                        Portfolio, 
                         MovingAverageCrossStrategy)
-
+    
     backtest.simulate_trading()
-
-
